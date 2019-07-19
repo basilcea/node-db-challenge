@@ -22,11 +22,23 @@ exports.up = function(knex) {
         .notNullable();
         table.text('notes');
         table.boolean('action_completed');
+
+    })
+    .createTable('Context' , table => {
+        table.increments();
+        table.integer('action_id')
+        .unsigned()
+        .references('id')
+        .inTable('Actions')      
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+        table.string('name', 128).notNullable()
     })
 };
 
 exports.down = function(knex) {
     return knex.schema
+    .dropTableIfExists('Context')
     .dropTableIfExists('Actions')
     .dropTableIfExists('Projects')
   
