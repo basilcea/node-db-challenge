@@ -1,35 +1,31 @@
 const db = require('../data/dbConfig.js');
 const mappers = require('../data/helpers/mappers')
-
 module.exports = {
-  //get: function(id) {
-  //   let query = db('actions');
-
-  //   if (id) {
-  //     return query
-  //       .where('id', id)
-  //       .first()
-  //       .then(action => mappers.actionToBody(action));
-  //   }
-
-  //   return query.then(actions => {
-  //     return actions.map(action => mappers.actionToBody(action));
-  //   });
-  // },
-  insert: function(action) {
-    return db('actions')
-      .insert(action)
-      .then(([id]) => this.get(id));
+  getContext: async function(id){
+    const value = await db('context').where('action_id',id)
+    return  value
   },
-  update: function(id, changes) {
-    return db('actions')
-      .where('id', id)
-      .update(changes)
-      .then(count => (count > 0 ? this.get(id) : null));
+  get: async function(id) {
+    let query = db('actions');
+    if (id) {
+     const value = await this.getContext(id);
+     const action = await db('actions').where('id', id).first()
+      action.context = value 
+        return mappers.actionToBody(action);
+    }
+
   },
-  remove: function(id) {
-    return db('actions')
+  insert: async function(action) {
+   const id = await db('actions').insert(action)
+      return await this.get(id);
+  },
+  update: async function(id, changes) {
+    const idVal = await db('actions').where('id', id).update(changes);
+      return await this.get(idVal)
+  },
+  remove: async function(id) {
+   await db('actions')
       .where('id', id)
-      .del();
+      .del()
   },
 }

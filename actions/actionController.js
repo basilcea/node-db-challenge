@@ -15,11 +15,9 @@ const status = (res, data, status) => {
   }
 
   const AddAction = async(req ,res) => {
-    const {description, notes} = req.body
-    const {id} = req.params
+    const {action_description, notes} = req.body
     try{
-        const data = await Actions.insert({description,notes, project_id:req.project.id})
-        console.log(data)
+        const data = await Actions.insert({action_description,notes, project_id:req.project.id})
         status(res ,data , 200)
     }
     catch(err){
