@@ -1,5 +1,5 @@
 const db = require('../data/dbConfig');
-
+const mappers = require('../data/helpers/mappers')
 module.exports = {
   get,
   insert,
@@ -10,7 +10,7 @@ module.exports = {
 
 async function getProjectActions(projectId) {
   const value = await db('Actions').where('project_id', projectId)
-  value.map(action => mappers.actionToBody(action));
+  return value
 }
 
 async function get(id) {
@@ -19,25 +19,21 @@ async function get(id) {
   if (id) {
     const project = await query.where('id', id).first();
    project.actions = await getProjectActions(id)
-    return project
+    return mappers.projectToBody(project)
   }
-return query
-  // return query.then(Projects => {
-  //   return Projects.map(project => mappers.projectToBody(project));
-  // });
+return query.map(project => mappers.projectToBody(project))
 }
 
-function insert(project) {
-  return db('Projects')
-    .insert(project)
-    .then(([id]) => this.get(id));
+async function insert(project) {
+  await db('Projects').insert(project)
+  return get()
+
 }
 
-function update(id, changes) {
-  return db('Projects')
-    .where('id', id)
-    .update(changes)
-    .then(count => (count > 0 ? this.get(id) : null));
+async function update(id, changes) {
+  await db('Projects').where('id', id).update(changes)
+  return get(id)
+
 }
 
 function remove(id) {

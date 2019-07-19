@@ -36,11 +36,11 @@ const validateActionId = async (req, res, next) => {
       if (!req.body) {
         return res.status(400).json({ message: "missing Project data" });
       }
-      if (!req.body.name) {
-        return res.status(400).json({ message: "missing required name field" });
+      if (!req.body.project_name) {
+        return res.status(400).json({ message: "missing required project name field" });
       }
-      if (!req.body.description) {
-        return res.status(400).json({ message: "missing required description field" });
+      if (!req.body.project_description) {
+        return res.status(400).json({ message: "missing required project description field" });
       }
       next();
     } catch (err) {
@@ -53,12 +53,10 @@ const validateActionId = async (req, res, next) => {
       if (!req.body) {
         return res.status(400).json({ message: "missing post data" });
       }
-      if (!req.body.description) {
-        return res.status(400).json({ message: "missing required description field" });
+      if (!req.body.action_description) {
+        return res.status(400).json({ message: "missing required action description field" });
       }
-      if (!req.body.notes) {
-        return res.status(400).json({ message: "missing required notes field" });
-      }
+  
       next();
     } catch (err) {
       return res.status(500).json(err.toString());

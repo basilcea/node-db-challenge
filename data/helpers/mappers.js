@@ -16,13 +16,13 @@ module.exports = {
   function projectToBody(project) {
     const result = {
       ...project,
-      completed: intToBoolean(project.completed),
+      project_completed: intToBoolean(project.project_completed),
     };
   
     if (project.actions) {
       result.actions = project.actions.map(action => ({
         ...action,
-        completed: intToBoolean(action.completed),
+        action_completed: intToBoolean(action.action_completed),
       }));
     }
   
@@ -32,7 +32,7 @@ module.exports = {
   function actionToBody(action) {
     return {
       ...action,
-      completed: intToBoolean(action.completed),
+      action_completed: intToBoolean(action.action_completed),
     };
   }
   
